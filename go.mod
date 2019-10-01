@@ -1,4 +1,4 @@
-module https: //github.com/muun/libwallet
+module github.com/muun/libwallet
 
 go 1.12
 
