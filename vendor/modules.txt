@@ -1,38 +1,36 @@
-# github.com/btcsuite/btcd v0.0.0-20190824003749-130ea5bddde3
+# github.com/btcsuite/btcd v0.20.1-beta
 github.com/btcsuite/btcd/btcec
 github.com/btcsuite/btcd/chaincfg
-github.com/btcsuite/btcd/txscript
-github.com/btcsuite/btcd/wire
 github.com/btcsuite/btcd/chaincfg/chainhash
 github.com/btcsuite/btcd/connmgr
+github.com/btcsuite/btcd/txscript
+github.com/btcsuite/btcd/wire
 # github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
 github.com/btcsuite/btclog
 # github.com/btcsuite/btcutil v0.0.0-20190425235716-9e5f4b9a998d
 github.com/btcsuite/btcutil
 github.com/btcsuite/btcutil/base58
-github.com/btcsuite/btcutil/hdkeychain
 github.com/btcsuite/btcutil/bech32
+github.com/btcsuite/btcutil/hdkeychain
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/go-errors/errors v1.0.1
 github.com/go-errors/errors
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
-# github.com/lightningnetwork/lnd v0.7.1-beta-rc2
-github.com/lightningnetwork/lnd/zpay32
+# github.com/lightningnetwork/lnd v0.8.0-beta
 github.com/lightningnetwork/lnd/lnwire
 github.com/lightningnetwork/lnd/tor
+github.com/lightningnetwork/lnd/zpay32
 # github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
 github.com/miekg/dns
 github.com/miekg/dns/internal/socket
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
 # golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7
+golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/ripemd160
 golang.org/x/crypto/scrypt
-golang.org/x/crypto/pbkdf2
 # golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
-golang.org/x/net/proxy
 golang.org/x/net/internal/socks
-# google.golang.org/grpc v1.18.0
-google.golang.org/grpc/codes
+golang.org/x/net/proxy
