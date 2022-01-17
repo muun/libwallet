@@ -155,6 +155,9 @@ github.com/pdfcpu/pdfcpu/pkg/types
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
+# github.com/shopspring/decimal v1.2.0
+## explicit
+github.com/shopspring/decimal
 # github.com/tidwall/gjson v1.6.0
 github.com/tidwall/gjson
 # github.com/tidwall/match v1.0.1
