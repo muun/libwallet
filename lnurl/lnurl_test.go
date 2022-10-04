@@ -556,24 +556,6 @@ func TestErrorContainsResponseBodyForFinishRequest(t *testing.T) {
 	})
 }
 
-func TestValidate(t *testing.T) {
-	link := "lightning:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"
-
-	ok := Validate(link)
-	if !ok {
-		t.Fatal("expected to validate link")
-	}
-}
-
-func TestValidateFallbackScheme(t *testing.T) {
-	link := "https://example.com/?lightning=LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"
-
-	ok := Validate(link)
-	if !ok {
-		t.Fatal("expected to validate link with fallback scheme")
-	}
-}
-
 func TestForbidden(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
@@ -601,12 +583,45 @@ func TestForbidden(t *testing.T) {
 	})
 }
 
+func TestZebedee403MapsToCountryNotSupported(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/withdraw/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(403)
+		w.Write([]byte("Forbidden"))
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	// Super ugly hack to emulate that local endpoint is zebedee
+	zebedeeHost = "127.0.0.1"
+	t.Cleanup(func() {
+		zebedeeHost = zebedeeHostConst // after test reset to its original value
+	})
+
+	qr, _ := encode(fmt.Sprintf("%s/withdraw", server.URL))
+
+	createInvoiceFunc := func(amt lnwire.MilliSatoshi, desc string, host string) (string, error) {
+		panic("should not reach here")
+	}
+
+	Withdraw(qr, createInvoiceFunc, true, func(e *Event) {
+		if e.Code < 100 {
+			if e.Code != ErrCountryNotSupported {
+				t.Fatalf("unexpected error code: %v", e.Code)
+			}
+		}
+		if e.Code == StatusInvoiceCreated {
+			t.Fatal("should not reach invoice creation")
+		}
+	})
+}
+
 func encode(url string) (string, error) {
 	return lnurl.LNURLEncode(url)
 }
 
 func TestWithdrawResponse_Validate(t *testing.T) {
-	
+
 	type fields struct {
 		Response           Response
 		Tag                string
@@ -616,7 +631,7 @@ func TestWithdrawResponse_Validate(t *testing.T) {
 		MinWithdrawable    stringOrNumber
 		DefaultDescription string
 	}
-	errorResponse := func (reason string) fields {
+	errorResponse := func(reason string) fields {
 		return fields{
 			Response: Response{
 				Status: StatusError,
@@ -624,7 +639,7 @@ func TestWithdrawResponse_Validate(t *testing.T) {
 			},
 		}
 	}
-	
+
 	tests := []struct {
 		name   string
 		fields fields
@@ -646,7 +661,7 @@ func TestWithdrawResponse_Validate(t *testing.T) {
 				Response: Response{
 					Status: StatusOK,
 				},
-				Tag: "withdraw",
+				Tag:             "withdraw",
 				MaxWithdrawable: 10,
 			},
 			ErrNone,
@@ -691,6 +706,65 @@ func TestWithdrawResponse_Validate(t *testing.T) {
 			got, _ := wr.Validate()
 			if got != tt.want {
 				t.Errorf("Validate() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestValidate(t *testing.T) {
+	type args struct {
+		qr string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "plain",
+			args: args{"LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "lightning scheme",
+			args: args{"lightning:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "HTTP fallback scheme",
+			args: args{"https://example.com/?lightning=LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "muun scheme",
+			args: args{"muun:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "muun scheme with double slashes",
+			args: args{"muun://LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "lightning scheme with double slashes",
+			args: args{"lightning://LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "muun + lightning schemes",
+			args: args{"muun:lightning:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+		{
+			name: "muun + lightning schemes with double slashes",
+			args: args{"muun://lightning:LNURL1DP68GUP69UHKCMMRV9KXSMMNWSARWVPCXQHKCMN4WFKZ7AMFW35XGUNPWULHXETRWFJHG0F3XGENGDGK59DKV"},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Validate(tt.args.qr); got != tt.want {
+				t.Errorf("Validate() = %v, want %v", got, tt.want)
 			}
 		})
 	}

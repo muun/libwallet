@@ -63,6 +63,7 @@ func createContext() *PaymentContext {
 	return context
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestBarebonesOnChainFixedAmountFixedFee(t *testing.T) {
 
 	listener := newTestListener()
@@ -96,6 +97,7 @@ func TestBarebonesOnChainFixedAmountFixedFee(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestBarebonesOnChainFixedAmountFixedDescriptionFixedFee(t *testing.T) {
 
 	listener := newTestListener()
@@ -126,6 +128,7 @@ func TestBarebonesOnChainFixedAmountFixedDescriptionFixedFee(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountChangeFee(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -185,6 +188,8 @@ func TestOnChainFixedAmountChangeFee(t *testing.T) {
 		t.Fatalf("expected total to match, got %v", confirmState.Total.InInputCurrency)
 	}
 }
+
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountFeeNeedsChange(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -253,6 +258,7 @@ func TestOnChainFixedAmountFeeNeedsChange(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountNoPossibleFee(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -277,6 +283,7 @@ func TestOnChainFixedAmountNoPossibleFee(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountTooSmall(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -293,6 +300,7 @@ func TestOnChainFixedAmountTooSmall(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainFixedAmountGreaterThanbalance(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -317,6 +325,34 @@ func TestOnChainFixedAmountGreaterThanbalance(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
+func TestOnChainSendZeroFundsWithZeroBalance(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	startState.Resolve("bitcoin:bcrt1qj35fkq34xend9w0ssthn432vl9pxxsuy0epzlu", libwallet.Regtest())
+
+	context := createContext()
+	context.NextTransactionSize = &NextTransactionSize{}
+
+	resolveState := listener.next().(*ResolveState)
+	resolveState.SetContext(context)
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(0), true)
+
+	validateState := listener.next().(*ValidateState)
+	validateState.Continue()
+
+	errorState := listener.next().(*ErrorState)
+
+	if errorState.Error != OperationErrorAmountTooSmall {
+		t.Fatalf("expected error to be amount too small but got %s", errorState.Error)
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainTFFA(t *testing.T) {
 
 	listener := newTestListener()
@@ -366,6 +402,7 @@ func TestOnChainTFFA(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestInvalidAmountEmitsInvalidAddress(t *testing.T) {
 	listener := newTestListener()
 	startState := NewOperationFlow(listener)
@@ -383,6 +420,7 @@ func TestInvalidAmountEmitsInvalidAddress(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainBack(t *testing.T) {
 
 	listener := newTestListener()
@@ -409,12 +447,40 @@ func TestOnChainBack(t *testing.T) {
 	enterDescriptionState.Back()
 
 	enterAmountState = listener.next().(*EnterAmountState)
+	// TODO when deleting this method impl (deprecated) rm lines below up until the call to ChangeCurrencyWithAmount
 	enterAmountState.ChangeCurrency("USD")
 
 	enterAmountState = listener.next().(*EnterAmountState)
 	enterAmountState.Back()
 
 	abortState := listener.next().(*AbortState)
+	if abortState.update != UpdateAll {
+		t.Fatalf("expected normal/full update , got %v", abortState.update)
+	}
+	abortState.Cancel()
+
+	enterAmountState = listener.next().(*EnterAmountState)
+	if enterAmountState.update != UpdateEmpty {
+		t.Fatalf("expected empty update, got %v", enterAmountState.update)
+	}
+	enterAmountState.Back()
+
+	abortState = listener.next().(*AbortState)
+	if abortState.update != UpdateAll {
+		t.Fatalf("expected normal/full update , got %v", abortState.update)
+	}
+	abortState.Cancel()
+
+	enterAmountState = listener.next().(*EnterAmountState)
+	enterAmountState.ChangeCurrencyWithAmount("USD", NewMonetaryAmountFromSatoshis(1_000_000))
+
+	enterAmountState = listener.next().(*EnterAmountState)
+	enterAmountState.Back()
+
+	abortState = listener.next().(*AbortState)
+	if abortState.update != UpdateAll {
+		t.Fatalf("expected normal/full update , got %v", abortState.update)
+	}
 	abortState.Cancel()
 
 	enterAmountState = listener.next().(*EnterAmountState)
@@ -436,6 +502,7 @@ func TestOnChainBack(t *testing.T) {
 	_ = listener.next().(*AbortState)
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestOnChainChangeCurrency(t *testing.T) {
 
 	listener := newTestListener()
@@ -465,6 +532,7 @@ func TestOnChainChangeCurrency(t *testing.T) {
 	enterDescriptionState.Back()
 
 	enterAmountState = listener.next().(*EnterAmountState)
+	// TODO when deleting this method impl (deprecated) rm lines below up until the call to ChangeCurrencyWithAmount
 	enterAmountState.ChangeCurrency("USD")
 
 	enterAmountState = listener.next().(*EnterAmountState)
@@ -477,6 +545,9 @@ func TestOnChainChangeCurrency(t *testing.T) {
 	if enterAmountState.Amount.InInputCurrency.String() != "32000 USD" {
 		t.Fatalf("expected amount to match 32000 USD, got '%v'", enterAmountState.Amount.InInputCurrency.String())
 	}
+	if enterAmountState.Amount.InPrimaryCurrency.String() != "1 BTC" {
+		t.Fatalf("expected amount to match 1 BTC, got '%v'", enterAmountState.Amount.InPrimaryCurrency.String())
+	}
 
 	enterAmountState.ChangeCurrency("BTC")
 	enterAmountState = listener.next().(*EnterAmountState)
@@ -488,6 +559,39 @@ func TestOnChainChangeCurrency(t *testing.T) {
 	}
 	if enterAmountState.Amount.InInputCurrency.String() != "1 BTC" {
 		t.Fatalf("expected amount to match 1 BTC, got '%v'", enterAmountState.Amount.InInputCurrency.String())
+	}
+	if enterAmountState.Amount.InPrimaryCurrency.String() != "1 BTC" {
+		t.Fatalf("expected amount to match 1 BTC, got '%v'", enterAmountState.Amount.InPrimaryCurrency.String())
+	}
+
+	enterAmountState.ChangeCurrencyWithAmount("USD", NewMonetaryAmountFromSatoshis(1_000_000))
+	enterAmountState = listener.next().(*EnterAmountState)
+	if enterAmountState.update != UpdateInPlace {
+		t.Fatalf("expected UpdateInPlace, got '%v'", enterAmountState.update)
+	}
+	if enterAmountState.Amount.InSat != 1_000_000 {
+		t.Fatalf("expected amount to match 1_000_000, got '%v'", enterAmountState.Amount.InSat)
+	}
+	if enterAmountState.Amount.InInputCurrency.String() != "320 USD" {
+		t.Fatalf("expected amount to match 320 USD, got '%v'", enterAmountState.Amount.InInputCurrency.String())
+	}
+	if enterAmountState.Amount.InPrimaryCurrency.String() != "0.01 BTC" {
+		t.Fatalf("expected amount to match 0.01 BTC, got '%v'", enterAmountState.Amount.InPrimaryCurrency.String())
+	}
+
+	enterAmountState.ChangeCurrencyWithAmount("BTC", enterAmountState.Amount.InInputCurrency)
+	enterAmountState = listener.next().(*EnterAmountState)
+	if enterAmountState.update != UpdateInPlace {
+		t.Fatalf("expected UpdateInPlace, got '%v'", enterAmountState.update)
+	}
+	if enterAmountState.Amount.InSat != 1_000_000 {
+		t.Fatalf("expected amount to match 1_000_000, got '%v'", enterAmountState.Amount.InSat)
+	}
+	if enterAmountState.Amount.InInputCurrency.String() != "0.01 BTC" {
+		t.Fatalf("expected amount to match 0.01 BTC, got '%v'", enterAmountState.Amount.InInputCurrency.String())
+	}
+	if enterAmountState.Amount.InPrimaryCurrency.String() != "0.01 BTC" {
+		t.Fatalf("expected amount to match 0.01 BTC, got '%v'", enterAmountState.Amount.InPrimaryCurrency.String())
 	}
 
 	enterDescriptionState.EnterDescription("bar")
@@ -518,6 +622,195 @@ func TestOnChainChangeCurrency(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
+func TestLightningSendZeroFunds(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	invoice, err := libwallet.ParseInvoice("lnbcrt1ps3l7zlpp5ngv7sl4wrjalma9navd0w9956pu0tcqwrltcnnzz83eeyk4rszxqdqqcqzpgrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqgqqqqqqqlgqqqqqqgq9qrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqsqqqqqqqlgqqqqqqgq9qsp5luyagw4mtcq735je8ldukhlkg063cxzycjhpz2x2hjfq2mgk5xns9qyyssq7ydzdwyl7yr6ldpzqjjspmgrevw4lxt4jwfy3cxm7we20wveqq8p8khjxuq9u3v953e7t9r8ysfzx5r874vu3nd7w5yx5eqfxu0tevspgxr607", libwallet.Regtest())
+	if err != nil {
+		panic(err)
+	}
+
+	startState.ResolveInvoice(invoice, libwallet.Regtest())
+
+	resolveState := listener.next().(*ResolveState)
+
+	context := createContext()
+	context.NextTransactionSize = &NextTransactionSize{}
+	context.SubmarineSwap = &SubmarineSwap{
+		BestRouteFees: []*BestRouteFees{
+			{
+				MaxCapacity:              100_000,
+				FeeProportionalMillionth: 1,
+				FeeBase:                  1_000,
+			},
+		},
+		FundingOutputPolicies: &FundingOutputPolicies{
+			MaximumDebtInSat:       0,
+			PotentialCollectInSat:  0,
+			MaxAmountInSatFor0Conf: 25_000,
+		},
+	}
+
+	resolveState.setContextWithTime(context, time.Unix(1629485164, 0))
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(0), false)
+
+	validateState := listener.next().(*ValidateLightningState)
+	validateState.Continue()
+
+	errorState := listener.next().(*ErrorState)
+
+	if errorState.Error != OperationErrorAmountTooSmall {
+		t.Fatalf("expected error to be amount too small but got %s", errorState.Error)
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
+func TestLightningSendZeroFundsTFFA(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	invoice, err := libwallet.ParseInvoice("lnbcrt1ps3l7zlpp5ngv7sl4wrjalma9navd0w9956pu0tcqwrltcnnzz83eeyk4rszxqdqqcqzpgrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqgqqqqqqqlgqqqqqqgq9qrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqsqqqqqqqlgqqqqqqgq9qsp5luyagw4mtcq735je8ldukhlkg063cxzycjhpz2x2hjfq2mgk5xns9qyyssq7ydzdwyl7yr6ldpzqjjspmgrevw4lxt4jwfy3cxm7we20wveqq8p8khjxuq9u3v953e7t9r8ysfzx5r874vu3nd7w5yx5eqfxu0tevspgxr607", libwallet.Regtest())
+	if err != nil {
+		panic(err)
+	}
+
+	startState.ResolveInvoice(invoice, libwallet.Regtest())
+
+	resolveState := listener.next().(*ResolveState)
+
+	context := createContext()
+	context.NextTransactionSize = &NextTransactionSize{}
+	context.SubmarineSwap = &SubmarineSwap{
+		BestRouteFees: []*BestRouteFees{
+			{
+				MaxCapacity:              100_000,
+				FeeProportionalMillionth: 1,
+				FeeBase:                  1_000,
+			},
+		},
+		FundingOutputPolicies: &FundingOutputPolicies{
+			MaximumDebtInSat:       0,
+			PotentialCollectInSat:  0,
+			MaxAmountInSatFor0Conf: 25_000,
+		},
+	}
+
+	resolveState.setContextWithTime(context, time.Unix(1629485164, 0))
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(0), true)
+
+	validateState := listener.next().(*ValidateLightningState)
+	validateState.Continue()
+
+	errorState := listener.next().(*ErrorState)
+
+	if errorState.Error != OperationErrorAmountTooSmall {
+		t.Fatalf("expected error to be amount too small but got %s", errorState.Error)
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
+func TestLightningSendNegativeFunds(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	invoice, err := libwallet.ParseInvoice("lnbcrt1ps3l7zlpp5ngv7sl4wrjalma9navd0w9956pu0tcqwrltcnnzz83eeyk4rszxqdqqcqzpgrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqgqqqqqqqlgqqqqqqgq9qrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqsqqqqqqqlgqqqqqqgq9qsp5luyagw4mtcq735je8ldukhlkg063cxzycjhpz2x2hjfq2mgk5xns9qyyssq7ydzdwyl7yr6ldpzqjjspmgrevw4lxt4jwfy3cxm7we20wveqq8p8khjxuq9u3v953e7t9r8ysfzx5r874vu3nd7w5yx5eqfxu0tevspgxr607", libwallet.Regtest())
+	if err != nil {
+		panic(err)
+	}
+
+	startState.ResolveInvoice(invoice, libwallet.Regtest())
+
+	resolveState := listener.next().(*ResolveState)
+
+	context := createContext()
+	context.NextTransactionSize = &NextTransactionSize{}
+	context.SubmarineSwap = &SubmarineSwap{
+		BestRouteFees: []*BestRouteFees{
+			{
+				MaxCapacity:              100_000,
+				FeeProportionalMillionth: 1,
+				FeeBase:                  1_000,
+			},
+		},
+		FundingOutputPolicies: &FundingOutputPolicies{
+			MaximumDebtInSat:       0,
+			PotentialCollectInSat:  0,
+			MaxAmountInSatFor0Conf: 25_000,
+		},
+	}
+
+	resolveState.setContextWithTime(context, time.Unix(1629485164, 0))
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(-10), false)
+
+	validateState := listener.next().(*ValidateLightningState)
+	validateState.Continue()
+
+	errorState := listener.next().(*ErrorState)
+
+	if errorState.Error != OperationErrorAmountTooSmall {
+		t.Fatalf("expected error to be amount too small but got %s", errorState.Error)
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
+func TestLightningSendNegativeFundsWithTFFA(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	invoice, err := libwallet.ParseInvoice("lnbcrt1ps3l7zlpp5ngv7sl4wrjalma9navd0w9956pu0tcqwrltcnnzz83eeyk4rszxqdqqcqzpgrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqgqqqqqqqlgqqqqqqgq9qrzjq2eawnq2ywdmcpe56nk02tfamgfmsn0acp0zcn8z8cr0djkgpslr5qqpkgqqqqsqqqqqqqlgqqqqqqgq9qsp5luyagw4mtcq735je8ldukhlkg063cxzycjhpz2x2hjfq2mgk5xns9qyyssq7ydzdwyl7yr6ldpzqjjspmgrevw4lxt4jwfy3cxm7we20wveqq8p8khjxuq9u3v953e7t9r8ysfzx5r874vu3nd7w5yx5eqfxu0tevspgxr607", libwallet.Regtest())
+	if err != nil {
+		panic(err)
+	}
+
+	startState.ResolveInvoice(invoice, libwallet.Regtest())
+
+	resolveState := listener.next().(*ResolveState)
+
+	context := createContext()
+	context.NextTransactionSize = &NextTransactionSize{}
+	context.SubmarineSwap = &SubmarineSwap{
+		BestRouteFees: []*BestRouteFees{
+			{
+				MaxCapacity:              100_000,
+				FeeProportionalMillionth: 1,
+				FeeBase:                  1_000,
+			},
+		},
+		FundingOutputPolicies: &FundingOutputPolicies{
+			MaximumDebtInSat:       0,
+			PotentialCollectInSat:  0,
+			MaxAmountInSatFor0Conf: 25_000,
+		},
+	}
+
+	resolveState.setContextWithTime(context, time.Unix(1629485164, 0))
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(-10), true)
+
+	validateState := listener.next().(*ValidateLightningState)
+	validateState.Continue()
+
+	errorState := listener.next().(*ErrorState)
+
+	if errorState.Error != OperationErrorAmountTooSmall {
+		t.Fatalf("expected error to be amount too small but got %s", errorState.Error)
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
 func TestLightningExpiredInvoice(t *testing.T) {
 
 	listener := newTestListener()
@@ -540,6 +833,7 @@ func TestLightningExpiredInvoice(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestLightningInvoiceWithAmount(t *testing.T) {
 
 	listener := newTestListener()
@@ -590,6 +884,7 @@ func TestLightningInvoiceWithAmount(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestLightningWithAmountBack(t *testing.T) {
 
 	listener := newTestListener()
@@ -649,6 +944,7 @@ func TestLightningWithAmountBack(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestLightningInvoiceWithAmountAndDescription(t *testing.T) {
 
 	listener := newTestListener()
@@ -696,6 +992,7 @@ func TestLightningInvoiceWithAmountAndDescription(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestLightningAmountlessInvoice(t *testing.T) {
 
 	listener := newTestListener()
@@ -763,6 +1060,7 @@ func TestLightningAmountlessInvoice(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestInvoiceOneConf(t *testing.T) {
 
 	listener := newTestListener()
@@ -826,6 +1124,7 @@ func TestInvoiceOneConf(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestAmountConversion(t *testing.T) {
 
 	// This test repros a bug where we had:
@@ -888,6 +1187,7 @@ func TestAmountConversion(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestInvoiceUnpayable(t *testing.T) {
 
 	listener := newTestListener()
@@ -939,6 +1239,7 @@ func TestInvoiceUnpayable(t *testing.T) {
 
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestInvoiceLend(t *testing.T) {
 
 	listener := newTestListener()
@@ -995,6 +1296,7 @@ func TestInvoiceLend(t *testing.T) {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func TestAmountInfo_Mutating(t *testing.T) {
 	amountInfo := &AmountInfo{
 		TakeFeeFromAmount:     false,
@@ -1010,5 +1312,87 @@ func TestAmountInfo_Mutating(t *testing.T) {
 	}
 	if !mutated.TakeFeeFromAmount {
 		t.Fatalf("Mutated should be mutated")
+	}
+}
+
+//goland:noinspection GoUnhandledErrorResult
+func TestOnChainTFFAWithDebtFeeNeedsChangeBecauseOutputAmountLowerThanDust(t *testing.T) {
+
+	listener := newTestListener()
+	startState := NewOperationFlow(listener)
+
+	startState.Resolve("bitcoin:bcrt1qj35fkq34xend9w0ssthn432vl9pxxsuy0epzlu", libwallet.Regtest())
+
+	context := createContext()
+
+	nts := &NextTransactionSize{}
+	nts.AddSizeForAmount(&SizeForAmount{
+		AmountInSat: 5338,
+		SizeInVByte: 172,
+	})
+	nts.ExpectedDebtInSat = 4353
+	context.NextTransactionSize = nts
+
+	context.FeeWindow.PutTargetedFees(100, 1.0)
+
+	resolveState := listener.next().(*ResolveState)
+	resolveState.SetContext(context)
+
+	enterAmountState := listener.next().(*EnterAmountState)
+	enterAmountState.EnterAmount(NewMonetaryAmountFromSatoshis(985), true)
+
+	validateState := listener.next().(*ValidateState)
+	validateState.Continue()
+
+	enterDescriptionState := listener.next().(*EnterDescriptionState)
+	enterDescriptionState.EnterDescription("bar")
+
+	// Amount is not payable with fastes/highest fee, but it is with min fee (1 sat/vbyte)
+	if enterDescriptionState.Amount.InInputCurrency.String() != "0 BTC" {
+		t.Fatalf("expected amount to match input, got %v", enterDescriptionState.Amount.InInputCurrency)
+	}
+
+	confirmState := listener.next().(*ConfirmState)
+
+	if confirmState.Note != "bar" {
+		t.Fatalf("expected note to match input, got '%v'", confirmState.Note)
+	}
+	if confirmState.Amount.InInputCurrency.String() != "0 BTC" {
+		t.Fatalf("expected amount to match input, got %v", confirmState.Amount.InInputCurrency)
+	}
+	if confirmState.Fee.InInputCurrency.String() != "0.000688 BTC" {
+		t.Fatalf("expected fee to match, got %v", confirmState.Fee.InInputCurrency)
+	}
+	if confirmState.Total.InInputCurrency.String() != "0.000688 BTC" {
+		t.Fatalf("expected total to match, got %v", confirmState.Total.InInputCurrency)
+	}
+	if confirmState.FeeNeedsChange != true {
+		t.Fatalf("expected feedsNeedsChange to be true, got %v", confirmState.FeeNeedsChange)
+	}
+
+	confirmState.OpenFeeEditor()
+	editFeeState := listener.next().(*EditFeeState)
+
+	editFeeState.SetFeeRate(1)
+
+	validateState = listener.next().(*ValidateState)
+	validateState.Continue()
+
+	confirmState = listener.next().(*ConfirmState)
+
+	if confirmState.Note != "bar" {
+		t.Fatalf("expected note to match input, got '%v'", confirmState.Note)
+	}
+	if confirmState.Amount.InInputCurrency.String() != "0.00000813 BTC" {
+		t.Fatalf("expected amount to match input, got %v", confirmState.Amount.InInputCurrency)
+	}
+	if confirmState.Fee.InInputCurrency.String() != "0.00000172 BTC" {
+		t.Fatalf("expected fee to match, got %v", confirmState.Fee.InInputCurrency)
+	}
+	if confirmState.Total.InInputCurrency.String() != "0.00000985 BTC" {
+		t.Fatalf("expected total to match, got %v", confirmState.Total.InInputCurrency)
+	}
+	if confirmState.FeeNeedsChange != false {
+		t.Fatalf("expected feedsNeedsChange to be false, got %v", confirmState.FeeNeedsChange)
 	}
 }
