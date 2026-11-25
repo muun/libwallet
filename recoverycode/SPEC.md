@@ -108,11 +108,64 @@ Callers need not search exhaustively. The closed form below is an equivalent sho
 
 `code` is the canonical string **including dashes**: 39 bytes for v1/v2 and 44 bytes for v3. The salt applies only to v1.
 
-## 8. Error kinds
+## 8. Block count (`BlockCount`)
 
-| Kind | Meaning |
+Input UIs often need to know how many blocks to show before the whole code is
+typed. Given at least the first symbols of a code (separators and case are
+ignored):
+
+- if the first symbol isn't `L`, the code is legacy: **8** blocks
+- otherwise, symbol 1 decides it: v2 has **8** blocks and v3 has **9**
+- an `L` with nothing after it is a **length** error, and an unknown version symbol is a **version** error
+
+## 9. Error kinds
+
+| Kind | Go sentinel | gomobile error code |
+|---|---|---|
+| `length`: wrong number of characters (or symbols, for `Normalize`) for the detected version | `ErrInvalidLength` | `ErrInvalidRecoveryCode` (7) |
+| `characters`: a character outside the alphabet, or a misplaced dash | `ErrInvalidCharacters` | `ErrInvalidRecoveryCode` (7) |
+| `version`: unknown version character | `ErrUnknownVersion` | `ErrInvalidRecoveryCode` (7) |
+| `checksum`: v3 checksum mismatch, so the code is well-formed but contains a typo | `ErrInvalidChecksum` | `ErrInvalidRecoveryCodeChecksum` (8) |
+
+## 10. API summary
+
+| `recoverycode` package | Root package (gomobile) |
 |---|---|
-| `length` | Wrong number of characters (or symbols, for `Normalize`) for the detected version |
-| `characters` | A character outside the alphabet, or a misplaced dash |
-| `version` | Unknown version character |
-| `checksum` | v3 checksum mismatch. The code is well-formed but contains a typo |
+| `Generate()` (v2) | `GenerateRecoveryCode()` (v2) |
+| `GenerateVersion(v)` | `GenerateRecoveryCodeWithVersion(v)` |
+| `Validate(code)`, `Version(code)` | `ValidateRecoveryCode(code)`, `GetRecoveryCodeVersion(code)` |
+| `Normalize(code)` | `NormalizeRecoveryCode(code)` |
+| `LocateTypo(code)` | `LocateRecoveryCodeTypo(code)` → `*RecoveryCodeTypo{Block, Index, Position, Suggested}` or `nil` |
+| `BlockCount(prefix)` | `RecoveryCodeBlockCount(prefix)` |
+| `ConvertToKey(code, salt)` | `RecoveryCodeToKey(code, salt)` |
+| `CurrentVersion` (2), `LatestVersion` (3) | `RecoveryCodeLatestVersion` (3) |
+
+## 11. Integration notes for consumers
+
+This library supports v3 codes, but **it never generates them unless asked to**.
+Consumers that want to adopt v3 should keep the following in mind.
+
+1. **The safety rule.** Don't generate v3 codes for users until every tool they
+   might need to recover their funds (wallet apps, recovery tooling) runs a
+   libwallet version that can parse v3. Older versions reject 44-character
+   codes, so a user holding a v3 code could be locked out. Gating v3
+   generation behind a server-side flag lets you control adoption per user.
+2. **Normalize first.** Call `NormalizeRecoveryCode` on user input before
+   validating it or deriving a key. Key derivation hashes the exact canonical
+   string, so every consumer must feed it the same bytes.
+3. **Support 8 and 9 blocks.** Input UIs must accept both lengths for as long
+   as v1/v2 codes exist. `RecoveryCodeBlockCount` tells a UI which to expect
+   once the first block is typed. Setup flows that display a v3 code should
+   make sure the user writes down all 9 blocks.
+4. **Distinguish typos from garbage.** Map `ErrInvalidRecoveryCodeChecksum` to
+   a "there's a typo in your code" message, and `ErrInvalidRecoveryCode` to a
+   "this isn't a recovery code" message.
+5. **Typo suggestions are hints.** Show `LocateRecoveryCodeTypo` results as a
+   suggestion ("block 5, character 2: did you mean X?") that the user must
+   accept. Never apply them automatically: input with two or more errors can
+   be one symbol away from a different valid code, which would derive the
+   wrong key.
+6. **A checksum is not ownership.** A valid checksum means the code has no
+   typos, not that it belongs to this user. Confirm ownership as before, with
+   the server challenge or by decrypting the Emergency Kit keys and comparing
+   fingerprints.
