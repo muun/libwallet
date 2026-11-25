@@ -1,0 +1,583 @@
+{
+  "validate": [
+    {
+      "description": "v1 legacy code",
+      "input": "R52Q-48Z3-25JR-S5JB-5SUS-HXHJ-RCMM-8YUA",
+      "valid": true,
+      "error": "",
+      "version": 1,
+      "private_key": "ade3fe99c608fd04484bce1ccf2889a5096f68f4b6b459e7f9ee9f0ada0a2782",
+      "salt": "FFFFFFFF"
+    },
+    {
+      "description": "v1 legacy code with real salt",
+      "input": "3V4N-R9EC-V3TQ-NRB3-Q7NY-9HXP-CSDC-B5BC",
+      "valid": true,
+      "error": "",
+      "version": 1,
+      "private_key": "fa3a914495092bf4ceec62570aa1aacba3574c1f860c1272e4a31761881f5737",
+      "salt": "63f701fda4fc0b0c"
+    },
+    {
+      "description": "v2 code",
+      "input": "LA2Q-48Z3-25JR-S5JB-5SUS-HXHJ-RCMM-8YUA",
+      "valid": true,
+      "error": "",
+      "version": 2,
+      "private_key": "0e1446153d4cafb073110739608fdd76b8712221476ec198cf35e1d74d274e83"
+    },
+    {
+      "description": "v2 random code 1",
+      "input": "LA79-AMRU-JBTP-FYS3-DLWR-53B7-W87X-3L7X",
+      "valid": true,
+      "error": "",
+      "version": 2,
+      "private_key": "e053f32c7de5e614a54ee84cbee56890a155d5bbf786ca7dc2a89c97ab5655ea"
+    },
+    {
+      "description": "v2 random code 2",
+      "input": "LA72-BAWL-92XV-FWCJ-KQYM-3JNN-ZK3V-4MA4",
+      "valid": true,
+      "error": "",
+      "version": 2,
+      "private_key": "0a1b66809fc26b063536d69b930c0d6bb12834e6b31535c646672f36f11c20aa"
+    },
+    {
+      "description": "v3 random code 1",
+      "input": "LB33-MXW2-RPRD-ZREJ-QRHW-RBW9-982X-HLSC-Z2U8",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "bcb2551cd4ea5bf335ed9ff74cddfbddb2aa848afce13497e62e9f682bb02137"
+    },
+    {
+      "description": "v3 random code 2",
+      "input": "LBDD-UYP8-Z59U-FV4M-VZXR-HRV9-LAZA-FCMD-UB8Q",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "950788cea9b20692c244849317668baa82130b1ebe091786b7cca66d241f2233"
+    },
+    {
+      "description": "v3 random code 3",
+      "input": "LB3K-7TNK-4QQ3-CJZJ-N9QR-S3ZW-BB53-UDVX-DQS9",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "b19ccbeb76dfae8cc208815ccdffbfad5b588ff2c1141958608c29a8717585e1"
+    },
+    {
+      "description": "v3 random code 4",
+      "input": "LBF3-ZJSK-VMDA-QY9W-JJHB-MVBW-BAAV-SSUD-D9ME",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "985945c8f73f580c7801a5adddc5a528a782d3fa6d7463a9ccaa453f8d71c260"
+    },
+    {
+      "description": "v3 random code 5",
+      "input": "LBB4-58X3-9BXL-HKWN-VNM5-4D4B-ZHRP-YF7H-UAXQ",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "e777b94cf8ef2be72a63e58dfe108a57e0783b4cd0045e9076c40d01d4bc2849"
+    },
+    {
+      "description": "v3 random code 6",
+      "input": "LBT5-WM2Q-U57Y-PXQ7-SSQ2-79RM-VXA4-58YW-PQB2",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "3757d91ac74e7652aa2094769366e867e2cca224a79bb48f5cd58bfe3e77148b"
+    },
+    {
+      "description": "v3 code with S1 = 0",
+      "input": "LBED-BA7W-NYNZ-3N8Y-8ZRJ-F2YJ-XFA2-SLUX-AA3N",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "d4fdb8ebc3407648524097e042bf81f2d4ecb6ece974efa173a9be1e5aeae045"
+    },
+    {
+      "description": "v3 code with S1 = 886",
+      "input": "LB7F-PJJY-EA5T-PJ8N-DAT4-J7EK-9CU3-FUJX-9T5H",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "e8d6362e2ac0af9e17b0a973bde3250745c6c9d556eefb8eb28d9c508b43aeeb"
+    },
+    {
+      "description": "v3 code with S2 = 0",
+      "input": "LBWL-TRCN-Z88J-TF7D-YF2X-8MWL-FY79-T5XM-KCAA",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "88fa1ba200f08388584293341c659fd7a98ac1c4de5e35f6ade9c25353d5789e"
+    },
+    {
+      "description": "v3 code with S2 = 886",
+      "input": "LBNY-MXX5-LVLC-4JXU-ZS5M-PXAW-4NDE-VNZ3-7N9T",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "406265b438d7866fc219485e78321ab9414f258567fce74a8fc5cc21e386c6ee"
+    },
+    {
+      "description": "v3 base code for error cases",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": true,
+      "error": "",
+      "version": 3,
+      "private_key": "74b36e622ce1e120de4e8fcd91be629498ffa196fc565da20a3676867693207b"
+    },
+    {
+      "description": "v3 single substitution in block 1",
+      "input": "LBRC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 2",
+      "input": "LBZC-MSTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 3",
+      "input": "LBZC-MYTK-39P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 4",
+      "input": "LBZC-MYTK-E9P3-3C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 5",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJK-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 6",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX59-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 7",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22C5-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 8",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-W8Y7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 single substitution in block 9",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-Z7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 adjacent transposition",
+      "input": "LBCZ-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 distant transposition",
+      "input": "LB7C-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAYZ-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 transposition between body and checksum block",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAYK-77QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 two substitutions",
+      "input": "LBZC-MRTK-E9P3-7C7B-AHJN-RX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 checksum value out of range (>= 887)",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-99QZ",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 checksum second value out of range (>= 887)",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K799",
+      "valid": false,
+      "error": "checksum",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 code missing block 9",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v2 code with an extra block",
+      "input": "LATE-A7WQ-YRCC-LTS5-RW9R-W5WB-JUPZ-BU2E-ABCD",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v2 code with version flipped to B",
+      "input": "LBTE-A7WQ-YRCC-LTS5-RW9R-W5WB-JUPZ-BU2E",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 code with version flipped to A",
+      "input": "LAZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "unknown version C",
+      "input": "LCTE-A7WQ-YRCC-LTS5-RW9R-W5WB-JUPZ-BU2E",
+      "valid": false,
+      "error": "version",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "unknown version C with 9 blocks",
+      "input": "LCZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "version",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "version char not in alphabet",
+      "input": "L1TE-A7WQ-YRCC-LTS5-RW9R-W5WB-JUPZ-BU2E",
+      "valid": false,
+      "error": "version",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 with misplaced dash",
+      "input": "LBZ-CMYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "characters",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 with invalid character O",
+      "input": "LBZC-MOTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "valid": false,
+      "error": "characters",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 lowercase is not canonical",
+      "input": "lbzc-mytk-e9p3-7c7b-ahjn-kx79-22cy-way7-k7qz",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v3 without dashes",
+      "input": "LBZCMYTKE9P37C7BAHJNKX7922CYWAY7K7QZ",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v2 invalid character",
+      "input": "LA2Q-48Z3-25JR-S51B-5SUS-HXHJ-RCMM-8YUA",
+      "valid": false,
+      "error": "characters",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v2 invalid length",
+      "input": "LA2Q-48Z3-25JR-SB5S-USHX-HJRC-MM8YUA",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "v1 invalid character L",
+      "input": "R52Q-48Z3-25JR-S5JB-5SUS-HXHJ-RCMM-8YUL",
+      "valid": false,
+      "error": "characters",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "empty string",
+      "input": "",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    },
+    {
+      "description": "single L",
+      "input": "L",
+      "valid": false,
+      "error": "length",
+      "version": 0,
+      "private_key": ""
+    }
+  ],
+  "normalize": [
+    {
+      "description": "canonical v3 unchanged",
+      "input": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "output": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v3 lowercase",
+      "input": "lbzc-mytk-e9p3-7c7b-ahjn-kx79-22cy-way7-k7qz",
+      "output": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v3 spaces instead of dashes",
+      "input": "LBZC MYTK E9P3 7C7B AHJN KX79 22CY WAY7 K7QZ",
+      "output": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v3 without separators",
+      "input": "LBZCMYTKE9P37C7BAHJNKX7922CYWAY7K7QZ",
+      "output": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v3 surrounding and mixed whitespace",
+      "input": "  LBZC\tMYTK\tE9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ \n",
+      "output": "LBZC-MYTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v2 lowercase without separators",
+      "input": "latea7wqyrcclts5rw9rw5wbjupzbu2e",
+      "output": "LATE-A7WQ-YRCC-LTS5-RW9R-W5WB-JUPZ-BU2E",
+      "error": ""
+    },
+    {
+      "description": "v1 lowercase",
+      "input": "r52q-48z3-25jr-s5jb-5sus-hxhj-rcmm-8yua",
+      "output": "R52Q-48Z3-25JR-S5JB-5SUS-HXHJ-RCMM-8YUA",
+      "error": ""
+    },
+    {
+      "description": "v3 keeps characters outside the alphabet",
+      "input": "lbzc-motk-e9p3-7c7b-ahjn-kx79-22cy-way7-k7qz",
+      "output": "LBZC-MOTK-E9P3-7C7B-AHJN-KX79-22CY-WAY7-K7QZ",
+      "error": ""
+    },
+    {
+      "description": "v3 one symbol short",
+      "input": "LBZCMYTKE9P37C7BAHJNKX7922CYWAY7K7Q",
+      "output": "",
+      "error": "length"
+    },
+    {
+      "description": "v2 one symbol too many",
+      "input": "LATEA7WQYRCCLTS5RW9RW5WBJUPZBU2EA",
+      "output": "",
+      "error": "length"
+    },
+    {
+      "description": "unknown version",
+      "input": "LCZCMYTKE9P37C7BAHJNKX7922CYWAY7K7QZ",
+      "output": "",
+      "error": "version"
+    },
+    {
+      "description": "empty string",
+      "input": "",
+      "output": "",
+      "error": "length"
+    },
+    {
+      "description": "only separators",
+      "input": " - - ",
+      "output": "",
+      "error": "length"
+    }
+  ],
+  "locate": [
+    {
+      "description": "valid code has no typo",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": false,
+      "position": -1,
+      "corrected": ""
+    },
+    {
+      "description": "single substitution at symbol 2",
+      "input": "LBVP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 2,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 9",
+      "input": "LBTP-WJRN-FFBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 9,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 17",
+      "input": "LBTP-WJRN-FXBT-U8KT-ZP5P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 17,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 31",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CL-2TB5",
+      "found": true,
+      "position": 31,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 32",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-YTB5",
+      "found": true,
+      "position": 32,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 33",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-25B5",
+      "found": true,
+      "position": 33,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 34",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TU5",
+      "found": true,
+      "position": 34,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "single substitution at symbol 35",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TBQ",
+      "found": true,
+      "position": 35,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "version char typo (B -> C)",
+      "input": "LCTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 1,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "prefix typo (L -> M)",
+      "input": "MBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 0,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "character outside alphabet (O)",
+      "input": "LBTP-WJRN-FXBT-O8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": true,
+      "position": 12,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "lowercase input without dashes",
+      "input": "lbtpwjrnfxbtu8ktz45p3qn9xk3jk3cv2tb5",
+      "found": true,
+      "position": 20,
+      "corrected": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5"
+    },
+    {
+      "description": "two characters outside alphabet",
+      "input": "LBTO-WJRN-FXBT-U8KT-Z45P-IQN9-XK3J-K3CV-2TB5",
+      "found": false,
+      "position": -1,
+      "corrected": ""
+    },
+    {
+      "description": "wrong length",
+      "input": "LBTP-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV",
+      "found": false,
+      "position": -1,
+      "corrected": ""
+    },
+    {
+      "description": "adjacent transposition",
+      "input": "LBPT-WJRN-FXBT-U8KT-Z45P-AQN9-XK3J-K3CV-2TB5",
+      "found": false,
+      "position": -1,
+      "corrected": ""
+    },
+    {
+      "description": "two substitutions",
+      "input": "LBTP-RJRN-FXBT-U8KT-Z45P-AQN9-XK33-K3CV-2TB5",
+      "found": false,
+      "position": -1,
+      "corrected": ""
+    }
+  ]
+}
