@@ -61,7 +61,10 @@ func Generate() string {
 // http://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/lib/libc/crypt/arc4random_uniform.c
 func randChar(chars string) byte {
 	clen := len(chars)
-	min := -clen % clen
+	// Reject bytes below 256 % clen so that the remaining range is an exact
+	// multiple of clen. (arc4random_uniform computes this as -n % n on
+	// unsigned ints; with Go's signed ints that expression is always 0.)
+	min := 256 % clen
 	for {
 		var b [1]byte
 		_, err := rand.Read(b[:])
